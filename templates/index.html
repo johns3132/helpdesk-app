@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zgłoszenie</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <h1>Zgłoś problem</h1>
+
+    <form method="POST">
+      <input name="name" placeholder="Twoje imię" required>
+      <textarea name="problem" placeholder="Opisz problem" required></textarea>
+      <button type="submit">Wyślij zgłoszenie</button>
+    </form>
+
+    <a href="/admin">Panel admina</a>
+  </div>
+</div>
+
+</body>
+</html>

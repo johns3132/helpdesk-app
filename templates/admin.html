@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Panel admina</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <h1>Panel zgłoszeń</h1>
+
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Imię</th>
+        <th>Problem</th>
+        <th>Status</th>
+        <th>Akcja</th>
+      </tr>
+
+      {% for t in tickets %}
+      <tr>
+        <td>{{ t[0] }}</td>
+        <td>{{ t[1] }}</td>
+        <td>{{ t[2] }}</td>
+
+        <td class="{{ 'open' if t[3]=='OPEN' else 'closed' }}">
+          {{ t[3] }}
+        </td>
+
+        <td>
+          {% if t[3] == "OPEN" %}
+          <a class="close-btn" href="/close/{{ t[0] }}">Zamknij</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <a href="/">← Wróć</a>
+  </div>
+</div>
+
+</body>
+</html>
