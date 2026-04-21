@@ -1,10 +1,20 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
+import os
 
 app = Flask(__name__)
 
+# 🔧 Ścieżka do bazy (ważne na Render)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "tickets.db")
+
+
+def get_db():
+    return sqlite3.connect(DB_PATH)
+
+
 def init_db():
-    conn = sqlite3.connect("tickets.db")
+    conn = get_db()
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS tickets (
@@ -17,13 +27,14 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         name = request.form["name"]
         problem = request.form["problem"]
 
-        conn = sqlite3.connect("tickets.db")
+        conn = get_db()
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO tickets (name, problem, status) VALUES (?, ?, ?)",
@@ -36,9 +47,10 @@ def index():
 
     return render_template("index.html")
 
+
 @app.route("/admin")
 def admin():
-    conn = sqlite3.connect("tickets.db")
+    conn = get_db()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM tickets")
     tickets = cursor.fetchall()
@@ -46,9 +58,10 @@ def admin():
 
     return render_template("admin.html", tickets=tickets)
 
+
 @app.route("/close/<int:id>")
 def close_ticket(id):
-    conn = sqlite3.connect("tickets.db")
+    conn = get_db()
     cursor = conn.cursor()
     cursor.execute("UPDATE tickets SET status='CLOSED' WHERE id=?", (id,))
     conn.commit()
@@ -56,6 +69,9 @@ def close_ticket(id):
 
     return redirect("/admin")
 
+
+init_db()
+
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
