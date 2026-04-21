@@ -4,7 +4,6 @@ import os
 
 app = Flask(__name__)
 
-# 🔧 Ścieżka do bazy (ważne na Render)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "tickets.db")
 
